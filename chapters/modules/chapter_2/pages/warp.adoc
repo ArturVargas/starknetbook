@@ -2,13 +2,97 @@
 
 = Transpiling Solidity into Cairo using WARP
 
-== Contributing
+== What is WARP?
 
-[quote, The Starknet Community]
-____
-*Unleash Your Passion to Perfect StarknetBook*
+WARP is the solution proposed by http://nethermind.io/[Nethermind.io] for an easy migration from Solidity to Cairo, without the learning curve that Cairo represents for Solidity devs.
 
-StarknetBook is a work in progress, and your passion, expertise, and unique insights can help transform it into something truly exceptional. Don't be afraid to challenge the status quo or break the Book! Together, we can create an invaluable resource that empowers countless others.
+WARP works as a transpiler that converts all native EVM Solidity code to native Cairo code for Starknet.
+This allows Solidity smart contract developers to migrate and/or write contracts in Cairo in a simple way and thus have an easy incorporation into the Starknet ecosystem.
 
-Embrace the excitement of contributing to something bigger than ourselves. If you see room for improvement, seize the opportunity! Check out our https://github.com/starknet-edu/starknetbook/blob/main/CONTRIBUTING.adoc[guidelines] and join our vibrant community. Let's fearlessly build Starknet! 
-____
+== Installation
+
+=== Dependencies
+
+First step We will need https://github.com/Z3Prover/z3[z3] and https://gmplib.org/#DOWNLOAD[gmp] installed to use Warp.
+
+[source, bash]
+----
+# Install command on macOS:
+brew install z3 gmp
+----
+
+If you're on an arm based Apple machine (m1/m2 mac) you'll need to install gmp and export some environment variables
+
+[source, bash]
+----
+export CFLAGS=-I`brew --prefix gmp`/include
+export LDFLAGS=-L`brew --prefix gmp`/lib
+----
+
+if you're on Ubuntu
+
+[source, bash]
+----
+# Install command on Ubuntu:
+sudo apt install libz3-dev libgmp3-dev
+----
+
+Next dependency Install Python3.9 with dev dependencies (`python3.9 python3.9-venv python3.9-dev`) into your base env. If you do not have the dev dependencies installed the installation will fail.
+
+[source, bash]
+----
+# Install command on macOS:
+brew install python@3.9
+----
+
+With python3.9 already installed you have venv covered:
+
+> If you are using Python 3.3 or newer (...) venv is included in the Python standard library and requires no additional installation.
+
+Then you can install dev package using pip:
+
+```bash
+pip install python-dev-tools
+```
+
+- Install commands on Ubuntu:
+
+```bash
+sudo apt install python3.9 python3.9-venv python3.9-dev
+```
+
+Or you can just install python3.9 and then install python-dev-tools using pip.
+
+=== WARP Installation method:
+
+Without any virtual environment activated perform the following in order:
+
+1. Add the warp package from npm.
+
+```bash
+yarn global add @nethermindeth/warp
+```
+
+2. Ensure the package was added by checking the version number:
+
+```bash
+warp version
+```
+
+3. Install the dependencies:
+
+```bash
+warp install --verbose
+```
+
+Use the `--python` flag to pass the path to `python3.9` binary, if the above command complains.
+
+```bash
+warp install --python <path/to/python3.9> --verbose
+```
+
+4. Test the installation worked by transpiling an example ERC20 contract:
+
+```bash
+warp transpile exampleContracts/ERC20.sol
+```
